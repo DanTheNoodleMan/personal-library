@@ -32,3 +32,8 @@ function render() {
 }
 
 render();
+
+function openForm(){
+    document.querySelector(".modal").classList.toggle("active");
+    console.log("open form clicked")
+}
