@@ -13,6 +13,7 @@ let bookContainer = document.querySelectorAll('.books-container');
 
 let removeBook = document.querySelectorAll('.book-remove');
 let bookCards = document.querySelectorAll('.book-card');
+let bookRead = document.querySelectorAll('.book-read');
 
 function isObjDup(newBook){
     return myLibrary.some((book) => newBook.name === book.name);
@@ -28,7 +29,12 @@ function addBookToLibrary(event) {
     let bookName = document.getElementById("title").value;
     let bookAuthor = document.getElementById("author").value;
     let bookPages = document.getElementById("pages").value;
-    let bookRead = document.getElementById("read").value;
+    let bookRead = document.getElementById("read");
+    if(bookRead.checked) {
+        bookRead = true;
+    } else {
+        bookRead = false;
+    }
     const newBook = new Book(bookName, bookAuthor, bookPages, bookRead);
     console.log(newBook);
 
@@ -45,17 +51,22 @@ function updateLibrary(newBook) {
     bookCard = document.createElement('div');
     bookTitle = document.createElement('h2');
     bookRemove = document.createElement('button');
+    bookRead = document.createElement('input');
 
     bookCard.classList.add('book-card');
     bookTitle.classList.add('book-title');
     bookRemove.classList.add('book-remove');
+    bookRead.classList.add('book-read');
+
     bookTitle.textContent = newBook.name;
     bookRemove.textContent = '×';
+    bookRead.checked = newBook.read;
 
     bookCard.setAttribute('data-index', myLibrary.indexOf(newBook));
     bookRemove.setAttribute('type', 'submit');
     bookRemove.setAttribute('onclick', 'removeBookFromLibrary(event)');
-
+    bookRead.setAttribute('type', 'checkbox');
+    bookRead.setAttribute('onclick', 'toggleRead(event)');
 
     //adds books to the shelves from top to bottom, if the top shelf is full, it goes to the next one. If a shelf has an empty slot, it goes there first before going to the next shelf.
     switch(true) {
@@ -75,9 +86,11 @@ function updateLibrary(newBook) {
 
     bookCard.appendChild(bookTitle);
     bookCard.appendChild(bookRemove);
+    bookCard.appendChild(bookRead);
 
     removeBook = document.querySelectorAll('.book-remove');
     bookCards = document.querySelectorAll('.book-card');
+    readBook = document.querySelectorAll('.book-read');
 
     nBooks = myLibrary.length;
 }
@@ -98,4 +111,11 @@ function removeBookFromLibrary(event) {
     }
 
     nBooks = myLibrary.length;
+}
+
+function toggleRead(event) {
+    let bookIndex = event.target.parentNode.getAttribute('data-index');
+    myLibrary[bookIndex].read = !myLibrary[bookIndex].read;
+    bookRead.checked = myLibrary[bookIndex].read;
+    console.log(myLibrary[bookIndex]);
 }
