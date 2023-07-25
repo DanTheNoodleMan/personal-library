@@ -23,10 +23,11 @@
 body {
     width: 100vw;
     height: 100vh;
+    overflow-x: hidden;
 }
 
 .book-card {
-    width: 10em;
+    min-width: 10em;
     height: 14em;
     background-color: #ffffff;
     border-radius: 10px;

@@ -6,12 +6,10 @@ function Book(name, author, pages, read) {
     this.read = read;
 }
 
-let idCount = 0;
-
 let myLibrary = [];
+let nBooks = myLibrary.length;
 
-
-let bookContainer = document.querySelector('.books-container');
+let bookContainer = document.querySelectorAll('.books-container');
 
 let removeBook = document.querySelectorAll('.book-remove');
 let bookCards = document.querySelectorAll('.book-card');
@@ -40,6 +38,8 @@ function addBookToLibrary(event) {
     updateLibrary(newBook);
 }   
 
+let containerLevel = 1;
+
 function updateLibrary(newBook) {
     // create a card for each book
     bookCard = document.createElement('div');
@@ -56,12 +56,30 @@ function updateLibrary(newBook) {
     bookRemove.setAttribute('type', 'submit');
     bookRemove.setAttribute('onclick', 'removeBookFromLibrary(event)');
 
-    bookContainer.appendChild(bookCard);
+
+    //adds books to the shelves from top to bottom, if the top shelf is full, it goes to the next one. If a shelf has an empty slot, it goes there first before going to the next shelf.
+    switch(true) {
+        case (bookContainer[0].childElementCount < 6):
+            bookContainer[0].appendChild(bookCard);
+            break;
+        case (bookContainer[1].childElementCount < 6):
+            bookContainer[1].appendChild(bookCard);
+            break;
+        case (bookContainer[2].childElementCount < 6):
+            bookContainer[2].appendChild(bookCard);
+            break;
+        case (bookContainer[3].childElementCount < 6):
+            bookContainer[3].appendChild(bookCard);
+            break;
+    }
+
     bookCard.appendChild(bookTitle);
     bookCard.appendChild(bookRemove);
 
     removeBook = document.querySelectorAll('.book-remove');
     bookCards = document.querySelectorAll('.book-card');
+
+    nBooks = myLibrary.length;
 }
 
 function removeBookFromLibrary(event) {
@@ -78,4 +96,6 @@ function removeBookFromLibrary(event) {
     for(let i = 0; i < myLibrary.length; i++) {
         bookCards[i].setAttribute('data-index', i);
     }
+
+    nBooks = myLibrary.length;
 }
