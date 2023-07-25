@@ -6,36 +6,19 @@ function Book(name, author, pages, read) {
     this.read = read;
 }
 
-const memoirsGeisha = new Book('Memoirs of a Geisha', 'Arthur Golden', 448, true);
-const harryPotter = new Book('Harry Potter and the Philosopher\'s Stone', 'J.K. Rowling', 223, true);
-const theHobbit = new Book('The Hobbit', 'J.R.R. Tolkien', 310, true);
+let idCount = 0;
 
 let myLibrary = [];
 
-let bookContainer = document.querySelector('.book-container');
+
+let bookContainer = document.querySelector('.books-container');
+
+let removeBook = document.querySelectorAll('.book-remove');
+let bookCards = document.querySelectorAll('.book-card');
 
 function isObjDup(newBook){
     return myLibrary.some((book) => newBook.name === book.name);
 }
-
-// function render(newBook = null) {
-//     // do stuff here
-//     myLibrary.forEach((book) => {
-//         // create a card for each book
-//         bookCard = document.createElement('div');
-//         bookTitle = document.createElement('h2');
-
-//         bookCard.classList.add('book-card');
-//         bookTitle.classList.add('book-title');
-//         bookTitle.textContent = book.name;
-
-//         bookContainer.appendChild(bookCard);
-//         bookCard.appendChild(bookTitle);
-//     });
-// }
-
-// render();
-
 
 const form = document.querySelector(".form-add");
 
@@ -61,11 +44,38 @@ function updateLibrary(newBook) {
     // create a card for each book
     bookCard = document.createElement('div');
     bookTitle = document.createElement('h2');
+    bookRemove = document.createElement('button');
 
     bookCard.classList.add('book-card');
     bookTitle.classList.add('book-title');
+    bookRemove.classList.add('book-remove');
     bookTitle.textContent = newBook.name;
+    bookRemove.textContent = '×';
+
+    bookCard.setAttribute('data-index', myLibrary.indexOf(newBook));
+    bookRemove.setAttribute('type', 'submit');
+    bookRemove.setAttribute('onclick', 'removeBookFromLibrary(event)');
 
     bookContainer.appendChild(bookCard);
     bookCard.appendChild(bookTitle);
+    bookCard.appendChild(bookRemove);
+
+    removeBook = document.querySelectorAll('.book-remove');
+    bookCards = document.querySelectorAll('.book-card');
+}
+
+function removeBookFromLibrary(event) {
+    event.preventDefault();
+    // remove book from library
+    // remove book from DOM
+    let bookIndex = event.target.parentNode.getAttribute('data-index');
+    myLibrary.splice(bookIndex, 1);
+    event.target.parentNode.remove();
+    bookCards = document.querySelectorAll('.book-card'); //get uptaded bookCards
+
+    console.log(myLibrary);
+
+    for(let i = 0; i < myLibrary.length; i++) {
+        bookCards[i].setAttribute('data-index', i);
+    }
 }
